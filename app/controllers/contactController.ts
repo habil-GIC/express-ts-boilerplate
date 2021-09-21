@@ -12,18 +12,6 @@ const Op: any = db.Sequelize.Op;
 
 class ContactController{
 
-        static testAxios = (req: Request, res: Response) => {
-            axios.get('/api/contacts/testingaxios')
-            .then(function(response){
-                res.send({
-                    message: 'sukses'
-                })
-            })
-            .catch(function(error){
-                res.send(error)
-            })
-        }
-
     // Create contact
          static create = (req: Request, res: Response) => {
         // kondisi request

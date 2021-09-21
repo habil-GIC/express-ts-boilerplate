@@ -32,6 +32,4 @@ router.delete("/hapus/:id", Auth.checkToken, ContactController.delete);
 
 router.get("/daftarlog", Auth.checkToken, ContactController.join);
 
-router.get("/testingaxios", Auth.checkToken, ContactController.testAxios);
-
 export {router};

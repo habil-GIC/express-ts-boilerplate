@@ -33,9 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true}))
 db.sequelize.sync();
 
 app.get("/", (req: Request, res: Response) => {
-    res.json({
-        message: "I am Muhammad Habil"
-    });
+    res.sendFile('index.html', { root: './app' })
 });
 
 app.use("/api/contacts", router);
