@@ -28,7 +28,6 @@ let corsOption: any = {
 app.use(cors(corsOption));
 
 app.use(bodyParser.json())
-
 app.use(bodyParser.urlencoded({ extended: true}))
 
 db.sequelize.sync();
@@ -40,7 +39,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/contacts", router);
-const PORT: any = process.env.PORT || 8080;
+const PORT: number | string  = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)

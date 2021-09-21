@@ -6,10 +6,23 @@ import {db} from "../models";
 import Redis from 'ioredis';
 import mysql from 'mysql2';
 import {Request, Response} from 'express';
+import axios from "axios";
 const redis: any = new Redis();
 const Op: any = db.Sequelize.Op;
 
 class ContactController{
+
+        static testAxios = (req: Request, res: Response) => {
+            axios.get('/api/contacts/testingaxios')
+            .then(function(response){
+                res.send({
+                    message: 'sukses'
+                })
+            })
+            .catch(function(error){
+                res.send(error)
+            })
+        }
 
     // Create contact
          static create = (req: Request, res: Response) => {
@@ -48,7 +61,7 @@ class ContactController{
           let sql: any = 'INSERT INTO contacts SET ?'
           connection.query(sql, contact, function(err, dataContact) {
             if(err) {
-                res.sendStatus(404);
+                res.send(err);
                 console.log(err);
             }
             else{
@@ -56,6 +69,7 @@ class ContactController{
                     message: 'Data berhasil ditambahkan',
                     data: dataContact
                 });
+                redis.del('contact');
             };
           });
     };
@@ -73,7 +87,7 @@ class ContactController{
                     //kalo tabelredisnya ada, hapus lalu buat lagi, supaya selalu refresh
                     if (contact) {
                         res.send(JSON.parse(contact));
-                        redis.del('contact');
+                        
                         //kalo gaada, buat baru
                     } else {
                         // const contactData = await Contact.findAll({
@@ -130,7 +144,7 @@ class ContactController{
             password: mysqlConfig.PASSWORD,
             database: mysqlConfig.DB,
           });
-        let sql = `UPDATE contacts SET ? WHERE id = ? `
+        let sql = `UPDATE contacts SET ? WHERE contact_id = ? `
         connection.query(sql, [req.body, id], function(err, dataContact) {
             if(err){
                 res.status(401)
@@ -140,6 +154,7 @@ class ContactController{
                     message: 'Data berhasil di update',
                     data: dataContact
                 })
+                redis.del('contact');
             }
         })
     };
@@ -171,7 +186,7 @@ class ContactController{
             password: mysqlConfig.PASSWORD,
             database: mysqlConfig.DB,
           });
-        let sql = `DELETE FROM contacts WHERE id = ?`
+        let sql = `DELETE FROM contacts WHERE contact_id = ?`
         connection.query(sql, id, function(err, dataContact){
             if(err){
                 res.status(400)
@@ -181,6 +196,7 @@ class ContactController{
                     message: 'Data berhasil dihapus',
                     data: dataContact
                 })
+                redis.del('contact');
             }
         })
         };
@@ -193,7 +209,7 @@ class ContactController{
                 database: mysqlConfig.DB,
               });
             
-            let sql = 'SELECT C.nama, C.no_hp, C.email, L.waktu_panggilan FROM `logs` L JOIN contacts C ON C.contact_id = L.contact_id';
+            let sql = 'SELECT C.nama, C.no_hp, C.email FROM `logs` L JOIN contacts C ON C.contact_id = L.contact_id';
             connection.execute(sql, function(err, results) {
                 res.json(results);
                 return;

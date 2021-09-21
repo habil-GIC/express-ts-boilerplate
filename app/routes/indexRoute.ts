@@ -3,6 +3,7 @@ import {AuthController} from "../controllers/authController";
 import Auth from "../middleware/authMiddleware";
 import {Router} from 'express';
 import { body, CustomValidator } from "express-validator";
+
 const router: Router = Router();
 //Route Login
 router.post("/login", 
@@ -30,5 +31,7 @@ router.put("/ubah/:id", Auth.checkToken, ContactController.update);
 router.delete("/hapus/:id", Auth.checkToken, ContactController.delete);
 
 router.get("/daftarlog", Auth.checkToken, ContactController.join);
+
+router.get("/testingaxios", Auth.checkToken, ContactController.testAxios);
 
 export {router};
