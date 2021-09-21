@@ -2,12 +2,12 @@ const secureEnv = require('secure-env');
 const env = secureEnv({secret:'smecgic'})
 process.env = { ...process.env, ...env }
 import {db} from '../models';
-const User: any = db.user;
+const User: any = db.users;
 import jwt from 'jsonwebtoken';
 import {validationResult} from 'express-validator';
 import {Request, Response} from 'express';
-const Sequelize: any = require('sequelize');
-const sequelize: any = new Sequelize()
+import { Sequelize } from 'sequelize';
+const sequelize: any = new Sequelize({dialect: 'mysql'}); 
 
 
 class AuthController {
