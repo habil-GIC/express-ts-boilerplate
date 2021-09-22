@@ -40,18 +40,32 @@
   </div>
 
   <script>
-    function addTodo() {
+    let accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRGF0YSI6eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImhhYmlsIiwicGFzc3dvcmQiOiIxMjM0IiwidG9rZW4iOm51bGwsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiJ9LCJpYXQiOjE2MzIyOTcxMTQsImV4cCI6MTYzMjQ2OTkxNH0.v9b2ope_D47od56yUd9hrWWrzSNu7cA4GUHeFBTVr40'
 
-      const config = {
+    function getTodo() {
+
+      axios.get('http://localhost:8080/api/contacts/daftar', {
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRGF0YSI6eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImhhYmlsIiwicGFzc3dvcmQiOiIxMjM0IiwidG9rZW4iOm51bGwsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiJ9LCJpYXQiOjE2MzIyODQwNjAsImV4cCI6MTYzMjQ1Njg2MH0.IY2hC6PT34hmX9GCa98sp3152vCnuRGWePC2Fsxt21Q'
+          Authorization: `Bearer ${accessToken}`
         }
-      };
-
-      axios.get('http://localhost:8080/api/contacts/daftar', config)
+      })
         .then(res => showOutput(res))
         .catch(err => console.error(err));
-      console.log(token);
+    }
+
+    function addTodo(){
+      axios.post('http://localhost:8080/api/contacts/buat', {
+        nama: 'Sayur',
+        no_hp: '081871929182',
+        email: 'sayuran@gmail.com'
+      },
+        {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(res => showOutput(res))
+      .catch(err => console.error(err))
     }
 
     function showOutput(res) {
@@ -84,10 +98,11 @@
       </div>
     </div>
   `;
-    }
+}
+document.getElementById('get').addEventListener('click', getTodo);
+document.getElementById('post').addEventListener('click', addTodo);
 
-    document.getElementById('post').addEventListener('click', addTodo);
-  </script>
+    </script>
   <!-- Optional JavaScript; choose one of the two! -->
 
   <!-- Option 1: Bootstrap Bundle with Popper -->

@@ -13,12 +13,13 @@ type CustomOrigin = (requestOrigin: string | undefined, callback: (err: Error | 
 const app: express.Application = express();
 
 
-app.options('*', cors);
+app.use(cors);
 app.use(function(req, res, next) {
     req.header('Access-Control-Request-Headers');
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-type,Accept,x-token,application-id,module-id,Authorization');
+
     next();
 });
 // let corsOption: any = {

@@ -15,6 +15,8 @@ class Auth {
     static checkToken(req: Request, res: Response, next: NextFunction) {
         // let x: any;
         const authorizationHeader = req.header("Authorization");
+        // console.log(authorizationHeader);
+        // next();
         const token = (authorizationHeader && authorizationHeader !== '') ? authorizationHeader.split(' ')[1] : undefined
         // const token: string = (x = authorizationHeader) === null || x === void 0 ? void 0 : x.replace("Bearer ", "");
         console.log("token ", typeof token);
@@ -32,8 +34,8 @@ class Auth {
                     message: "Akun tidak terdaftar",
                 });
             }
-            next();    
         });
+        next();    
     }
 
 }
