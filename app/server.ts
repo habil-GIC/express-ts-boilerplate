@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors, { CorsOptions } from 'cors';
+import Cors from 'cors';
+const cors = Cors();
 import {db} from './models';
 import {Request, Response} from 'express';
 import {router} from './routes/indexRoute';
@@ -11,21 +12,26 @@ type CustomOrigin = (requestOrigin: string | undefined, callback: (err: Error | 
 
 const app: express.Application = express();
 
-let whiteList: any = [
-    'http://localhost:7070'
-];
 
-let corsOption: any = {
-    origin: function (origin: any, callback: any) {
-        if (whiteList.indexOf(origin) !== -1 || !origin) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    }
-}
+app.options('*', cors);
+app.use(function(req, res, next) {
+    req.header('Access-Control-Request-Headers');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-type,Accept,x-token,application-id,module-id,Authorization');
+    next();
+});
+// let corsOption: any = {
+//     origin: function (origin: any, callback: any) {
+//         if (whiteList.indexOf(origin) !== -1 || !origin) {
+//             callback(null, true)
+//         } else {
+//             callback(new Error('Not allowed by CORS'))
+//         }
+//     }
+// }
 
-app.use(cors(corsOption));
+
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true}))

@@ -41,17 +41,21 @@
 
   <script>
     function addTodo() {
-      axios
-    .post('https://jsonplaceholder.typicode.com/todos', {
-      title: 'New Todo',
-      completed: false
-    })
-    .then(res => showOutput(res))
-    .catch(err => console.error(err));
-}
 
-function showOutput(res) {
-    document.getElementById('res').innerHTML = `
+      const config = {
+        headers: {
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRGF0YSI6eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImhhYmlsIiwicGFzc3dvcmQiOiIxMjM0IiwidG9rZW4iOm51bGwsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiJ9LCJpYXQiOjE2MzIyODQwNjAsImV4cCI6MTYzMjQ1Njg2MH0.IY2hC6PT34hmX9GCa98sp3152vCnuRGWePC2Fsxt21Q'
+        }
+      };
+
+      axios.get('http://localhost:8080/api/contacts/daftar', config)
+        .then(res => showOutput(res))
+        .catch(err => console.error(err));
+      console.log(token);
+    }
+
+    function showOutput(res) {
+      document.getElementById('res').innerHTML = `
     <div class="card card-body mb-4">
       <h5>Status: ${res.status}</h5>
     </div>
@@ -80,9 +84,9 @@ function showOutput(res) {
       </div>
     </div>
   `;
-  }
+    }
 
-  document.getElementById('post').addEventListener('click', addTodo);
+    document.getElementById('post').addEventListener('click', addTodo);
   </script>
   <!-- Optional JavaScript; choose one of the two! -->
 
@@ -91,7 +95,7 @@ function showOutput(res) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
     crossorigin="anonymous"></script>
-  
+
 
   <!-- Option 2: Separate Popper and Bootstrap JS -->
   <!--

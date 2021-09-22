@@ -146,7 +146,15 @@ class ContactController{
             }
         })
     };
-    
+        static tesAxios = (req: Request, res: Response) => {
+            const contact = {
+                nama: req.body.nama,
+                no_hp: req.body.no_hp,
+                email: req.body.email
+            };
+
+            
+        }
     // delete contact by id
         static delete = (req: Request, res: Response) => {
         const id = req.params.id;

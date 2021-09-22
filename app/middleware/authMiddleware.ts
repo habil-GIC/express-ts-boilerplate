@@ -32,8 +32,8 @@ class Auth {
                     message: "Akun tidak terdaftar",
                 });
             }
+            next();    
         });
-        next();    
     }
 
 }
