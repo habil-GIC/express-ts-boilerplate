@@ -42,7 +42,7 @@
   <script>
     let accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRGF0YSI6eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImhhYmlsIiwicGFzc3dvcmQiOiIxMjM0IiwidG9rZW4iOm51bGwsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiJ9LCJpYXQiOjE2MzIyOTcxMTQsImV4cCI6MTYzMjQ2OTkxNH0.v9b2ope_D47od56yUd9hrWWrzSNu7cA4GUHeFBTVr40'
 
-    function getTodo() {
+    function getContact() {
 
       axios.get('http://localhost:8080/api/contacts/daftar', {
         headers: {
@@ -53,11 +53,11 @@
         .catch(err => console.error(err));
     }
 
-    function addTodo(){
+    function addContact(){
       axios.post('http://localhost:8080/api/contacts/buat', {
-        nama: 'Sayur',
-        no_hp: '081871929182',
-        email: 'sayuran@gmail.com'
+        nama: 'Buah',
+        no_hp: '082173928374',
+        email: 'buahan@gmail.com'
       },
         {
         headers: {
@@ -68,6 +68,29 @@
       .catch(err => console.error(err))
     }
 
+    function updateContact(){
+      axios.put('http://localhost:8080/api/contacts/ubah/2', {
+        nama: 'Fahri',
+        no_hp: '018293928378',
+        email: 'fahriram@gmail.com'
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(res => showOutput(res))
+      .catch(err => console.error(err))
+    }
+
+    function deleteContact(){
+      axios.delete('http://localhost:8080/api/contacts/hapus/2', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(res => showOutput(res))
+      .catch(err => console.error(err))
+    }
     function showOutput(res) {
       document.getElementById('res').innerHTML = `
     <div class="card card-body mb-4">
@@ -99,8 +122,10 @@
     </div>
   `;
 }
-document.getElementById('get').addEventListener('click', getTodo);
-document.getElementById('post').addEventListener('click', addTodo);
+document.getElementById('get').addEventListener('click', getContact);
+document.getElementById('post').addEventListener('click', addContact);
+document.getElementById('update').addEventListener('click', updateContact);
+document.getElementById('delete').addEventListener('click', deleteContact);
 
     </script>
   <!-- Optional JavaScript; choose one of the two! -->
