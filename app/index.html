@@ -55,16 +55,18 @@
 
     function addContact(){
       axios.post('http://localhost:8080/api/contacts/buat', {
-        nama: 'Buah',
-        no_hp: '082173928374',
-        email: 'buahan@gmail.com'
+        nama: 'B0ah',
+        no_hp: '082173923',
+        email: 'haob@gmail.com'
       },
         {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
       })
-      .then(res => showOutput(res))
+      .then(res => {
+        showOutput(res)
+      })
       .catch(err => console.error(err))
     }
 

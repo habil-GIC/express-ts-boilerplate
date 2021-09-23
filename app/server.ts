@@ -5,6 +5,7 @@ const cors = Cors();
 import {db} from './models';
 import {Request, Response} from 'express';
 import {router} from './routes/indexRoute';
+import Queue from 'bull'
 
 type StaticOrigin = boolean | string | RegExp | (boolean | string | RegExp)[];
 
@@ -22,6 +23,14 @@ app.use(function(req, res, next) {
 
     next();
 });
+export const firstQueue = new Queue('logging');
+                firstQueue.process(function(job, done) {
+                    console.log('sdjakdsjakdja')
+                    job.progress(42);
+                    done();
+                })
+
+                
 // let corsOption: any = {
 //     origin: function (origin: any, callback: any) {
 //         if (whiteList.indexOf(origin) !== -1 || !origin) {

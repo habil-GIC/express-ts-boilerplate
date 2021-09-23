@@ -7,6 +7,8 @@ import Redis from 'ioredis';
 import mysql from 'mysql2';
 import {Request, response, Response} from 'express';
 import axios from "axios";
+import Queue from "bull";
+import { firstQueue } from "../server";
 const redis: any = new Redis();
 const Op: any = db.Sequelize.Op;
 
@@ -57,6 +59,10 @@ class ContactController{
                     message: 'Data berhasil ditambahkan',
                     data: dataContact
                 });
+                firstQueue.add({
+                    nama: 'ajdsadsad',
+                    kaaa: 'sdasadsadsa'
+                 })
                 redis.del('contact');
             };
           });
@@ -207,7 +213,13 @@ class ContactController{
         }
 
         static tesAxios = (req: Request, res: Response) => {
-            axios.get('http://localhost:8080/api/contacts/daftarlog', {
+            const contact = {
+                nama: req.body.nama,
+                no_hp: req.body.no_hp,
+                email: req.body.email
+            };
+            axios.get('http://localhost:8080/api/contacts/daftar',
+            {
                 headers: {
                     Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRGF0YSI6eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImhhYmlsIiwicGFzc3dvcmQiOiIxMjM0IiwidG9rZW4iOm51bGwsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiJ9LCJpYXQiOjE2MzIyOTcxMTQsImV4cCI6MTYzMjQ2OTkxNH0.v9b2ope_D47od56yUd9hrWWrzSNu7cA4GUHeFBTVr40'
                 }
@@ -219,7 +231,10 @@ class ContactController{
                 res.json(err)
             })
             
+            
+            
         }
+
     
         
     }
