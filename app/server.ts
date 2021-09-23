@@ -25,7 +25,6 @@ app.use(function(req, res, next) {
 });
 export const firstQueue = new Queue('logging');
                 firstQueue.process(function(job, done) {
-                    console.log('sdjakdsjakdja')
                     job.progress(42);
                     done();
                 })
