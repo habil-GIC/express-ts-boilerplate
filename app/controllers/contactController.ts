@@ -9,6 +9,7 @@ import {Request, response, Response} from 'express';
 import axios from "axios";
 import Queue from "bull";
 import { firstQueue } from "../server";
+import nodemailer from 'nodemailer'
 const redis: any = new Redis();
 const Op: any = db.Sequelize.Op;
 
@@ -29,7 +30,16 @@ class ContactController{
             no_hp: req.body.no_hp,
             email: req.body.email
         };
-    
+        
+        const data = {
+            nama: 'Magic Of The Moment',
+            uniqueToken: 'djj1je19124wq8yda81adh180djsa10u13'
+        }
+
+        const options = {
+            delay: 60000,
+            attempts: 2
+        }
         // tambah kontak ke mysql
         // Contact.create(contact)
         //     .then((data) => {
@@ -59,10 +69,7 @@ class ContactController{
                     message: 'Data berhasil ditambahkan',
                     data: dataContact
                 });
-                firstQueue.add({
-                    nama: 'ajdsadsad',
-                    kaaa: 'sdasadsadsa'
-                 })
+                firstQueue.add(data, options)
                 redis.del('contact');
             };
           });
@@ -204,8 +211,46 @@ class ContactController{
                 database: mysqlConfig.DB,
               });
             
+            const sendMailQueue = new Queue('sendMail')
+            const data = {
+                email: 'habilmuhammad20@gmail.com'
+            }
+
+            const options = {
+                delay: 15000
+            }
+            
+            function sendMail(email: string) {
+                return new Promise((resolve, reject) => {
+                    let mailOptions = {
+                        from: 'habil@gic-indonesia.com',
+                        to: email,
+                        subject: 'Testing Queue',
+                        text: 'tewahadhadijaijdwijadijawd.'
+                    };
+                    let mailConfig = {
+                        service: 'gmail',
+                        auth: {
+                            user: 'habil@gic-indonesia.com',
+                            pass: '19April2000'
+                        }
+                    };
+                    nodemailer.createTransport(mailConfig).sendMail(mailOptions, (err, info) => {
+                        if(err) {
+                            reject(err); 
+                        }else {
+                            resolve(info)
+                        }
+                    })
+                })
+            }
+
             let sql = 'SELECT C.nama, C.no_hp, C.email FROM `logs` L JOIN contacts C ON C.contact_id = L.contact_id';
             connection.execute(sql, function(err, results) {
+                sendMailQueue.add(data, options);
+                sendMailQueue.process(async job => {
+                    return await sendMail(job.data.email)
+                })
                 res.json(results);
                 return;
             })
