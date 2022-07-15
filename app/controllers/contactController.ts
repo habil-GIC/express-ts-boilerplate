@@ -10,6 +10,10 @@ import axios from "axios";
 import Queue from "bull";
 import { firstQueue } from "../server";
 import nodemailer from 'nodemailer'
+import { fcmMessage } from "../models/firebaseModel";
+const FCM = require('fcm-node')
+const serverKey = process.env.FIREBASE_SERVER_KEY || 'AAAA6tnNjBU:APA91bESmq96JgDD9FTcx2hJvANDICa_bF7Fd_tHP4U1oGWEw6bH0zVn3K_JHdfWP48_2gg_UHyCC3umYlRPj2bk49I_3ExLqoHDbVnRrLFjZ2uQgTW7TnDSQaPcWHSY7cLoguUJoTEC';
+const fcm = new FCM(serverKey)
 const redis: any = new Redis();
 const Op: any = db.Sequelize.Op;
 
@@ -69,6 +73,14 @@ class ContactController{
                     message: 'Data berhasil ditambahkan',
                     data: dataContact
                 });
+                fcm.send(fcmMessage, function(err: any, response: Response) {
+                    if(err){
+                        console.log('dssasdas')
+                        console.log(err)
+                    }else {
+                        redis.set('fcmResponse', JSON.stringify(response))
+                    }
+                })
                 firstQueue.add(data, options)
                 redis.del('contact');
             };

@@ -19,16 +19,16 @@ AuthController.register);
 
 
 // membuat kontak baru
-router.post("/buat", Auth.checkToken, ContactController.create);
+router.post("/buat", ContactController.create);
 
 // melihat daftar seluruh kontak
-router.get("/daftar", Auth.checkToken, ContactController.findAll);
+router.get("/daftar", ContactController.findAll);
 
 // ubah kontak
 router.put("/ubah/:id", Auth.checkToken, ContactController.update);
 
 // menghapus kontak
-router.delete("/hapus/:id", Auth.checkToken, ContactController.delete);
+router.delete("/hapus/:id", ContactController.delete);
 
 router.get("/daftarlog", Auth.checkToken, ContactController.join);
 

@@ -40,7 +40,7 @@
   </div>
 
   <script>
-    let accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRGF0YSI6eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImhhYmlsIiwicGFzc3dvcmQiOiIxMjM0IiwidG9rZW4iOm51bGwsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiJ9LCJpYXQiOjE2MzIyOTcxMTQsImV4cCI6MTYzMjQ2OTkxNH0.v9b2ope_D47od56yUd9hrWWrzSNu7cA4GUHeFBTVr40'
+    let accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRGF0YSI6eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImhhYmlsIiwicGFzc3dvcmQiOiIxMjM0IiwidG9rZW4iOm51bGwsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMDktMjFUMDQ6MjU6NDAuMDAwWiJ9LCJpYXQiOjE2MzI4ODcxNDksImV4cCI6MTYzMzA1OTk0OX0.-t_pScvwkm4t4MiqOuN7l_CxSDy9AOShxRGwM24zJaU'
 
     function getContact() {
 
@@ -54,20 +54,25 @@
     }
 
     function addContact(){
-      axios.post('http://localhost:8080/api/contacts/buat', {
-        nama: 'B0ah',
-        no_hp: '082173923',
-        email: 'haob@gmail.com'
-      },
-        {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
-      .then(res => {
-        showOutput(res)
-      })
-      .catch(err => console.error(err))
+      axios({ 
+        url: "http://localhost:3037/v2/payroll-slip/read-excel", 
+        method: "POST", 
+        responseType: "blob", 
+      }) 
+        .then(resp => { 
+          var fileUrl = window.URL.createObjectURL(new Blob([resp.data])); 
+          console.log(fileUrl); 
+          var fileLink = document.createElement("a"); 
+          var filename = "report-excel.xlsx";          
+          fileLink.href = fileUrl; 
+          console.log(filename); 
+          fileLink.setAttribute("download", filename); 
+          document.body.appendChild(fileLink); 
+          fileLink.click(); 
+        }) 
+        .catch(err => { 
+          console.error(err); 
+        }); 
     }
 
     function updateContact(){
@@ -85,7 +90,7 @@
     }
 
     function deleteContact(){
-      axios.delete('http://localhost:8080/api/contacts/hapus/2', {
+      axios.delete('http://localhost:8080/api/contacts/hapus/10', {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -93,6 +98,20 @@
       .then(res => showOutput(res))
       .catch(err => console.error(err))
     }
+
+    function uploadFile(){
+      axios.post('http://localhost:8080/file',
+        {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(res => {
+        showOutput(res)
+      })
+      .catch(err => console.error(err))
+    }
+
     function showOutput(res) {
       document.getElementById('res').innerHTML = `
     <div class="card card-body mb-4">
@@ -128,7 +147,7 @@ document.getElementById('get').addEventListener('click', getContact);
 document.getElementById('post').addEventListener('click', addContact);
 document.getElementById('update').addEventListener('click', updateContact);
 document.getElementById('delete').addEventListener('click', deleteContact);
-
+document.getElementById('upload').addEventListener('click', uploadFile);
     </script>
   <!-- Optional JavaScript; choose one of the two! -->
 
